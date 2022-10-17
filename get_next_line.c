@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:18:29 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/17 17:11:01 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/17 18:14:28 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,58 @@ void	save_extra_char();
 
 char	*get_next_line(int fd)
 {
-	char	buf[BUFFER_SIZE];
-	ssize_t	n;
-	size_t	i;
-	char	*line;
-	size_t	line_len;	
-	size_t	bufn;
+	char		buf[BUFFER_SIZE];
+	ssize_t		n;
+	ssize_t		i;
+	ssize_t		len;
+	ssize_t		j;
+	static char	*extra_chars = "";
+	char		*tmp;
+	char		*line;
 
-	static char*	extra_chars;
-	extra_chars = "";
-	n = 0;
-	while (
-	n = read(fd, buf, BUFFER_SIZE);
-	buf[n] = '\0';
-	extra_chars = ft_strjoin(extra_chars, buf);
-	return (extra_chars);	
+	line = NULL;
+	tmp = NULL;
+	n = 1;
+	while (n > 0)
+	{
+		n = read(fd, buf, BUFFER_SIZE);
+		// Add check for n == -1 here
+		buf[n] = '\0';
+		tmp = ft_strdup(extra_chars);
+		extra_chars = ft_strjoin(tmp, buf);
+		free(tmp);
+		i = 0;
+		while (extra_chars[i] != '\0')
+		{
+			if (extra_chars[i] == '\n')
+			{
+				i = -1;
+				break ;
+			}
+			i++;	
+		}
+		if (i == -1)
+			break ;
+	}
+	i = 0;
+	while (extra_chars[i] != '\n')
+		i++;
+	line = (char *)malloc((i + 1) * sizeof(char));	
+	len = 0;
+	while (len < i)
+	{
+		line[len] = extra_chars[len];
+		len++;
+	}	
+	line[len] = '\n';
+	line[len + 1] = '\0';
+	j = i;
+//	while (extra_chars[i] != '\0')
+//		i++;
+	tmp = ft_strdup(extra_chars + j);
+	extra_chars = ft_strdup(tmp);
+	free(tmp);		
+	return (line);	
 }
 
 #include <fcntl.h>
@@ -49,6 +86,9 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		return (-1);
+	line = get_next_line(fd);
+	printf("%s", line);	
+	free(line);
 	line = get_next_line(fd);
 	printf("%s", line);	
 	free(line);

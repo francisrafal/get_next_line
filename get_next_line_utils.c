@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:19:59 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/17 13:52:27 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/17 17:48:15 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,45 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	new_str[s1_len + i] = '\0';
 	return (new_str);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*dup;
+	size_t	size;
+
+	size = (ft_strlen(s) + 1) * sizeof(char);
+	dup = (char *)malloc(size);
+	if (!dup)
+		return (NULL);
+	ft_memmove(dup, s, size);
+	return (dup);
+}
+
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	size_t	i;
+	char	*s;
+	char	*d;
+
+	s = (char *) src;
+	d = (char *) dest;
+	i = 0;
+	if ((d - s) > 0)
+	{
+		while (n > 0)
+		{
+			d[n - 1] = s[n - 1];
+			n--;
+		}
+	}
+	if ((d - s) < 0)
+	{
+		while (i < n)
+		{
+			d[i] = s[i];
+			i++;
+		}
+	}
+	return (dest);
 }
