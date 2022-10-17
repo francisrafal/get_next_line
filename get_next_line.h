@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:20:05 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/14 10:48:22 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/17 13:52:34 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,7 @@
 # include <stdlib.h>
 
 char	*get_next_line(int fd);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *s);
 
 #endif

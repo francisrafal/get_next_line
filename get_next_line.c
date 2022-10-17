@@ -6,11 +6,18 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:18:29 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/14 15:43:33 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/17 17:11:01 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+/* DELETE BEFORE SUBMISSION */
+#include <stdio.h>
+
+void	read_from_fd();
+void	get_line();
+void	save_extra_char();
 
 char	*get_next_line(int fd)
 {
@@ -21,44 +28,31 @@ char	*get_next_line(int fd)
 	size_t	line_len;	
 	size_t	bufn;
 
+	static char*	extra_chars;
+	extra_chars = "";
 	n = 0;
-	bufn = 1;
-	n = read(fd, buf, BUFFER_SIZE); 
-	n = read(fd, buf, BUFFER_SIZE); 
-	line_len = 0;
-	while (buf[line_len] != '\n' && n != 0 && line_len < BUFFER_SIZE * bufn)
-		line_len++;
-	//if (line_len == BUFFER_SIZE * bufn)
-	//	n = read(fd, buf + line_len, BUFFER_SIZE); 
-	line = (char *)malloc((line_len + 1) * sizeof(char));
-	if (line == NULL)
-		return (NULL);
-	i = 0;
-	while (i < line_len)
-	{
-		line[i] = buf[i];
-		i++;
-	} 
-	line[i] = '\n';
-	if (n > 0)
-		return (line); 
-	return (NULL);	
+	while (
+	n = read(fd, buf, BUFFER_SIZE);
+	buf[n] = '\0';
+	extra_chars = ft_strjoin(extra_chars, buf);
+	return (extra_chars);	
 }
 
-#include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
 
-int	main(void)
+int	main(int argc, char **argv)
 {
+	(void)argc;
 	int		fd;
 	char	*line;
-	fd = open("file.txt", O_RDONLY);
+	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		return (-1);
 	line = get_next_line(fd);
 	printf("%s", line);	
-	close(fd);
+	free(line);
+	if (close(fd) == -1)
+		return (-1);
 	return (0);
 }
-
