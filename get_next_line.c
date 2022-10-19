@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:18:29 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/19 16:37:40 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/19 17:41:42 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char	*get_next_line(int fd)
 	ssize_t		n;
 	ssize_t		i;
 	ssize_t		len;
-	ssize_t		j;
 	static char	*extra_chars = "";
 	char		*tmp;
 	char		*line;
@@ -54,7 +53,7 @@ char	*get_next_line(int fd)
 		if (i == -1)
 			break ;
 	}
-	if (extra_chars == NULL)
+	if (extra_chars[0] == '\0')
 	{
 		return (NULL);
 	}
@@ -72,10 +71,7 @@ char	*get_next_line(int fd)
 	}	
 	line[len] = '\n';
 	line[len + 1] = '\0';
-	j = i;
-//	while (extra_chars[i] != '\0')
-//		i++;
-	tmp = ft_strdup(extra_chars + j + 1);
+	tmp = ft_strdup(extra_chars + i + 1);
 	free(extra_chars);
 	extra_chars = ft_strdup(tmp);
 	free(tmp);		
@@ -97,7 +93,8 @@ int	main(int argc, char **argv)
 	while (line != NULL)
 	{
 		line = get_next_line(fd);
-		printf("%s", line);	
+		if (line != NULL)
+			printf("%s", line);	
 	}
 	free(line);
 	if (close(fd) == -1)
