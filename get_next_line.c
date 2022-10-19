@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:18:29 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/17 18:14:28 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/19 16:37:40 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,16 @@ char	*get_next_line(int fd)
 		if (i == -1)
 			break ;
 	}
+	if (extra_chars == NULL)
+	{
+		return (NULL);
+	}
 	i = 0;
 	while (extra_chars[i] != '\n')
 		i++;
-	line = (char *)malloc((i + 1) * sizeof(char));	
+	line = (char *)malloc((i + 2) * sizeof(char));	
+	if (!line)
+		return (NULL);
 	len = 0;
 	while (len < i)
 	{
@@ -69,7 +75,8 @@ char	*get_next_line(int fd)
 	j = i;
 //	while (extra_chars[i] != '\0')
 //		i++;
-	tmp = ft_strdup(extra_chars + j);
+	tmp = ft_strdup(extra_chars + j + 1);
+	free(extra_chars);
 	extra_chars = ft_strdup(tmp);
 	free(tmp);		
 	return (line);	
@@ -86,11 +93,12 @@ int	main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		return (-1);
-	line = get_next_line(fd);
-	printf("%s", line);	
-	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);	
+	line = "";
+	while (line != NULL)
+	{
+		line = get_next_line(fd);
+		printf("%s", line);	
+	}
 	free(line);
 	if (close(fd) == -1)
 		return (-1);
