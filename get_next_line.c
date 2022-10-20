@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:18:29 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/19 17:41:42 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/20 13:54:33 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ char	*get_next_line(int fd)
 	while (n > 0)
 	{
 		n = read(fd, buf, BUFFER_SIZE);
-		// Add check for n == -1 here
+		if (n == -1)
+			return (NULL);
 		buf[n] = '\0';
 		tmp = ft_strdup(extra_chars);
 		extra_chars = ft_strjoin(tmp, buf);

@@ -1,4 +1,4 @@
 gnlTester
-file.txt
+file*.txt
 *.swp
 a.out
