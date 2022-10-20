@@ -6,7 +6,7 @@
 /*   By: frafal <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 10:18:29 by frafal            #+#    #+#             */
-/*   Updated: 2022/10/20 13:54:33 by frafal           ###   ########.fr       */
+/*   Updated: 2022/10/20 14:13:16 by frafal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,18 @@
 /* DELETE BEFORE SUBMISSION */
 #include <stdio.h>
 
-void	read_from_fd();
-void	get_line();
-void	save_extra_char();
-
-char	*get_next_line(int fd)
+ssize_t	read_from_fd(int fd, char *extra_chars, char *tmp)
 {
-	char		buf[BUFFER_SIZE];
 	ssize_t		n;
 	ssize_t		i;
-	ssize_t		len;
-	static char	*extra_chars = "";
-	char		*tmp;
-	char		*line;
+	char		buf[BUFFER_SIZE];
 
-	line = NULL;
-	tmp = NULL;
 	n = 1;
 	while (n > 0)
 	{
 		n = read(fd, buf, BUFFER_SIZE);
 		if (n == -1)
-			return (NULL);
+			return (-1);
 		buf[n] = '\0';
 		tmp = ft_strdup(extra_chars);
 		extra_chars = ft_strjoin(tmp, buf);
@@ -54,10 +44,26 @@ char	*get_next_line(int fd)
 		if (i == -1)
 			break ;
 	}
-	if (extra_chars[0] == '\0')
-	{
+	return (n);
+}
+
+void	get_line();
+void	save_extra_char();
+
+char	*get_next_line(int fd)
+{
+	ssize_t		i;
+	ssize_t		len;
+	static char	*extra_chars = "";
+	char		*tmp;
+	char		*line;
+
+	line = NULL;
+	tmp = NULL;
+	if (read_from_fd(fd, extra_chars, tmp) == -1)
 		return (NULL);
-	}
+	if (extra_chars[0] == '\0')
+		return (NULL);
 	i = 0;
 	while (extra_chars[i] != '\n')
 		i++;
