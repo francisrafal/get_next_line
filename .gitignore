@@ -4,3 +4,5 @@ file*.txt
 a.out
 .vscode
 get_next_line
+Makefile
+*.o
