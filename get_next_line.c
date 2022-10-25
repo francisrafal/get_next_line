@@ -29,7 +29,7 @@ ssize_t	read_from_fd(int fd, char **extra_chars, char *tmp)
 			return (-1);
 		buf[n] = '\0';
 		tmp = ft_strdup(*extra_chars);
-		if ((*extra_chars)[0])
+		if (*extra_chars != NULL)
 			free(*extra_chars);
 		*extra_chars = ft_strjoin(tmp, buf);
 		free(tmp);
@@ -55,7 +55,7 @@ char	*get_line(char **extra_chars, ssize_t *i)
 	char		*line;
 
 	*i = 0;
-	while ((*extra_chars)[*i] != '\n')
+	while ((*extra_chars)[*i] != '\n' && (*extra_chars)[*i] != '\0')
 		(*i)++;
 	line = (char *)malloc((*i + 2) * sizeof(char));
 	if (!line)
@@ -75,7 +75,10 @@ void	save_extra_char(char **extra_chars, ssize_t *i)
 {
 	char		*tmp;
 
-	tmp = ft_strdup(*extra_chars + *i + 1);
+	if ((*extra_chars)[*i] == '\0')
+		tmp = ft_strdup(*extra_chars + *i);
+	else
+		tmp = ft_strdup(*extra_chars + *i + 1);
 	free(*extra_chars);
 	*extra_chars = ft_strdup(tmp);
 	free(tmp);
@@ -84,7 +87,7 @@ void	save_extra_char(char **extra_chars, ssize_t *i)
 char	*get_next_line(int fd)
 {
 	ssize_t		i;
-	static char	*extra_chars = "";
+	static char	*extra_chars = NULL;
 	char		*tmp;
 	char		*line;
 
@@ -101,8 +104,8 @@ char	*get_next_line(int fd)
 
 #include <fcntl.h>
 #include <unistd.h>
-
-/* int	main(int argc, char **argv)
+/* 
+int	main(int argc, char **argv)
 {
 	(void) argc;
 	int		fd;

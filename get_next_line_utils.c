@@ -57,6 +57,12 @@ char	*ft_strdup(const char *s)
 	char	*dup;
 	size_t	size;
 
+	if (s == NULL)
+	{
+		dup = (char *)malloc(sizeof (char));
+		dup[0] = '\0';
+		return (dup);
+	}
 	size = (ft_strlen(s) + 1) * sizeof(char);
 	dup = (char *)malloc(size);
 	if (!dup)
