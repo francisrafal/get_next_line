@@ -39,7 +39,7 @@ ssize_t	read_from_fd(int fd, char *extra_chars, char *tmp)
 				i = -1;
 				break ;
 			}
-			i++;	
+			i++;
 		}
 		if (i == -1)
 			break ;
@@ -67,7 +67,7 @@ char	*get_next_line(int fd)
 	i = 0;
 	while (extra_chars[i] != '\n')
 		i++;
-	line = (char *)malloc((i + 2) * sizeof(char));	
+	line = (char *)malloc((i + 2) * sizeof(char));
 	if (!line)
 		return (NULL);
 	len = 0;
@@ -81,8 +81,8 @@ char	*get_next_line(int fd)
 	tmp = ft_strdup(extra_chars + i + 1);
 	free(extra_chars);
 	extra_chars = ft_strdup(tmp);
-	free(tmp);		
-	return (line);	
+	free(tmp);
+	return (line);
 }
 
 #include <fcntl.h>
@@ -93,6 +93,7 @@ int	main(int argc, char **argv)
 	(void)argc;
 	int		fd;
 	char	*line;
+
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		return (-1);
@@ -101,7 +102,7 @@ int	main(int argc, char **argv)
 	{
 		line = get_next_line(fd);
 		if (line != NULL)
-			printf("%s", line);	
+			printf("%s", line);
 	}
 	free(line);
 	if (close(fd) == -1)

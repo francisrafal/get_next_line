@@ -2,3 +2,4 @@ gnlTester
 file*.txt
 *.swp
 a.out
+.vscode
