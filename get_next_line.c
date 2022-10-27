@@ -15,24 +15,32 @@
 /* DELETE BEFORE SUBMISSION */
 #include <stdio.h>
 
-ssize_t	read_from_fd(int fd, char **extra_chars, char *tmp)
+ssize_t	read_from_fd(int fd, char **extra_chars)
 {
 	ssize_t		n;
 	ssize_t		i;
-	char		buf[BUFFER_SIZE + 1];
+	char		*buf;
+	char		*tmp;
 
 	n = 1;
 	while (n > 0)
 	{
+		if (!(buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char))))
+			return (-1);
+		tmp = NULL;
 		n = read(fd, buf, BUFFER_SIZE);
 		if (n == -1)
+		{
+			free(buf);
 			return (-1);
+		}
 		buf[n] = '\0';
 		tmp = ft_strdup(*extra_chars);
 		if (*extra_chars != NULL)
 			free(*extra_chars);
 		*extra_chars = ft_strjoin(tmp, buf);
 		free(tmp);
+		free(buf);
 		i = 0;
 		while ((*extra_chars)[i] != '\0')
 		{
@@ -57,7 +65,9 @@ char	*get_line(char **extra_chars, ssize_t *i)
 	*i = 0;
 	while ((*extra_chars)[*i] != '\n' && (*extra_chars)[*i] != '\0')
 		(*i)++;
-	line = (char *)malloc((*i + 2) * sizeof(char));
+	if ((*extra_chars)[*i] == '\n')
+		(*i)++;
+	line = (char *)malloc((*i + 1) * sizeof(char));
 	if (!line)
 		return (NULL);
 	len = 0;
@@ -66,8 +76,7 @@ char	*get_line(char **extra_chars, ssize_t *i)
 		line[len] = (*extra_chars)[len];
 		len++;
 	}	
-	line[len] = '\n';
-	line[len + 1] = '\0';
+	line[len] = '\0';
 	return (line);
 }
 
@@ -75,10 +84,10 @@ void	save_extra_char(char **extra_chars, ssize_t *i)
 {
 	char		*tmp;
 
-	if ((*extra_chars)[*i] == '\0')
-		tmp = ft_strdup(*extra_chars + *i);
+	if ((*extra_chars)[*i - 1] == '\0')
+		tmp = ft_strdup(*extra_chars + *i - 1);
 	else
-		tmp = ft_strdup(*extra_chars + *i + 1);
+		tmp = ft_strdup(*extra_chars + *i);
 	free(*extra_chars);
 	*extra_chars = ft_strdup(tmp);
 	free(tmp);
@@ -88,12 +97,10 @@ char	*get_next_line(int fd)
 {
 	ssize_t		i;
 	static char	*extra_chars = NULL;
-	char		*tmp;
 	char		*line;
 
 	line = NULL;
-	tmp = NULL;
-	if (read_from_fd(fd, &extra_chars, tmp) == -1)
+	if (read_from_fd(fd, &extra_chars) == -1)
 		return (NULL);
 	if (extra_chars[0] == '\0')
 		return (NULL);
@@ -104,8 +111,8 @@ char	*get_next_line(int fd)
 
 #include <fcntl.h>
 #include <unistd.h>
-/* 
-int	main(int argc, char **argv)
+
+/* int	main(int argc, char **argv)
 {
 	(void) argc;
 	int		fd;
