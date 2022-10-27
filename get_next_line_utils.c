@@ -98,3 +98,21 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
+
+char	*ft_strchr(const char *s, int c)
+{
+	size_t	i;
+
+	if (s == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i] && (s[i] != (char)c))
+	{
+		i++;
+	}
+	if ((char)c == 0)
+		return ((char *)s + i);
+	if (!s[i])
+		return (NULL);
+	return ((char *)s + i);
+}

@@ -15,17 +15,15 @@
 ssize_t	read_from_fd(int fd, char **extra_chars)
 {
 	ssize_t		n;
-	ssize_t		i;
 	char		*buf;
 	char		*tmp;
 
 	n = 1;
-	while (n > 0)
+	while (n > 0 && !ft_strchr(*extra_chars, '\n'))
 	{
 		buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 		if (buf == NULL)
 			return (-1);
-		tmp = NULL;
 		n = read(fd, buf, BUFFER_SIZE);
 		if (n == -1)
 		{
@@ -39,18 +37,6 @@ ssize_t	read_from_fd(int fd, char **extra_chars)
 		*extra_chars = ft_strjoin(tmp, buf);
 		free(tmp);
 		free(buf);
-		i = 0;
-		while ((*extra_chars)[i] != '\0')
-		{
-			if ((*extra_chars)[i] == '\n')
-			{
-				i = -1;
-				break ;
-			}
-			i++;
-		}
-		if (i == -1)
-			break ;
 	}
 	return (n);
 }
