@@ -25,7 +25,7 @@ ssize_t	read_from_fd(int fd, char **extra_chars)
 		if (buf == NULL)
 			return (-1);
 		n = read(fd, buf, BUFFER_SIZE);
-		if (n == -1)
+		if (n == -1 || (n == 0 && (*extra_chars == NULL)))
 		{
 			free(buf);
 			return (-1);
