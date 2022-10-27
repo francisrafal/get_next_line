@@ -12,9 +12,6 @@
 
 #include "get_next_line.h"
 
-/* DELETE BEFORE SUBMISSION */
-#include <stdio.h>
-
 ssize_t	read_from_fd(int fd, char **extra_chars)
 {
 	ssize_t		n;
@@ -25,7 +22,8 @@ ssize_t	read_from_fd(int fd, char **extra_chars)
 	n = 1;
 	while (n > 0)
 	{
-		if (!(buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char))))
+		buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+		if (buf == NULL)
 			return (-1);
 		tmp = NULL;
 		n = read(fd, buf, BUFFER_SIZE);
@@ -57,7 +55,7 @@ ssize_t	read_from_fd(int fd, char **extra_chars)
 	return (n);
 }
 
-char	*get_line(char **extra_chars, ssize_t *i)
+char	*get_current_line(char **extra_chars, ssize_t *i)
 {
 	ssize_t		len;
 	char		*line;
@@ -91,7 +89,7 @@ void	save_extra_char(char **extra_chars, ssize_t *i)
 	free(*extra_chars);
 	*extra_chars = ft_strdup(tmp);
 	free(tmp);
-} 
+}
 
 char	*get_next_line(int fd)
 {
@@ -104,35 +102,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if (extra_chars[0] == '\0')
 		return (NULL);
-	line = get_line(&extra_chars, &i);
+	line = get_current_line(&extra_chars, &i);
 	save_extra_char(&extra_chars, &i);
 	return (line);
 }
-
-#include <fcntl.h>
-#include <unistd.h>
-
-/* int	main(int argc, char **argv)
-{
-	(void) argc;
-	int		fd;
-	char	*line;
-
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	line = "";
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		if (line != NULL)
-		{
-			printf("%s", line);
-			free(line);
-			line = "";
-		}
-	}
-	if (close(fd) == -1)
-		return (-1);
-	return (0);
-} */

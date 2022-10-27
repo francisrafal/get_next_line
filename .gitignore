@@ -6,3 +6,4 @@ a.out
 get_next_line
 Makefile
 *.o
+main.c
