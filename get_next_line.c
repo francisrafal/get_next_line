@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-ssize_t	read_from_fd(int fd, char **extra_chars)
+static ssize_t	read_from_fd(int fd, char **extra_chars)
 {
 	ssize_t		n;
 	char		*buf;
@@ -41,7 +41,7 @@ ssize_t	read_from_fd(int fd, char **extra_chars)
 	return (n);
 }
 
-char	*get_current_line(char **extra_chars, ssize_t *i)
+static char	*get_current_line(char **extra_chars, ssize_t *i)
 {
 	ssize_t		len;
 	char		*line;
@@ -64,7 +64,7 @@ char	*get_current_line(char **extra_chars, ssize_t *i)
 	return (line);
 }
 
-void	save_extra_char(char **extra_chars, ssize_t *i)
+static void	save_extra_char(char **extra_chars, ssize_t *i)
 {
 	char		*tmp;
 
