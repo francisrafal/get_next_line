@@ -83,6 +83,8 @@ char	*get_next_line(int fd)
 	static char	*extra_chars = NULL;
 	char		*line;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	line = NULL;
 	if (read_from_fd(fd, &extra_chars) == -1)
 		return (NULL);
