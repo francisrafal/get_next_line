@@ -11,6 +11,16 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+
+static void	free_and_set_null(char **ptr)
+{
+	if (ptr != NULL)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
+}
 
 static ssize_t	read_from_fd(int fd, char **extra_chars)
 {
@@ -27,16 +37,17 @@ static ssize_t	read_from_fd(int fd, char **extra_chars)
 		n = read(fd, buf, BUFFER_SIZE);
 		if (n == -1 || (n == 0 && (*extra_chars == NULL)))
 		{
-			free(buf);
+			free_and_set_null(extra_chars);
+			free_and_set_null(&buf);
 			return (-1);
 		}
 		buf[n] = '\0';
 		tmp = ft_strdup(*extra_chars);
 		if (*extra_chars != NULL)
-			free(*extra_chars);
+			free_and_set_null(extra_chars);
 		*extra_chars = ft_strjoin(tmp, buf);
-		free(tmp);
-		free(buf);
+		free_and_set_null(&tmp);
+		free_and_set_null(&buf);
 	}
 	return (n);
 }
@@ -89,7 +100,10 @@ char	*get_next_line(int fd)
 	if (read_from_fd(fd, &extra_chars) == -1)
 		return (NULL);
 	if (extra_chars[0] == '\0')
+	{
+		free_and_set_null(&extra_chars);
 		return (NULL);
+	}
 	line = get_current_line(&extra_chars, &i);
 	save_extra_char(&extra_chars, &i);
 	return (line);
