@@ -43,8 +43,7 @@ static ssize_t	read_from_fd(int fd, char **extra_chars)
 		}
 		buf[n] = '\0';
 		tmp = ft_strdup(*extra_chars);
-		if (*extra_chars != NULL)
-			free_and_set_null(extra_chars);
+		free_and_set_null(extra_chars);
 		*extra_chars = ft_strjoin(tmp, buf);
 		free_and_set_null(&tmp);
 		free_and_set_null(&buf);
@@ -83,9 +82,9 @@ static void	save_extra_char(char **extra_chars, ssize_t *i)
 		tmp = ft_strdup(*extra_chars + *i - 1);
 	else
 		tmp = ft_strdup(*extra_chars + *i);
-	free(*extra_chars);
+	free_and_set_null(extra_chars);
 	*extra_chars = ft_strdup(tmp);
-	free(tmp);
+	free_and_set_null(&tmp);
 }
 
 char	*get_next_line(int fd)
